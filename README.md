@@ -39,7 +39,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Download
 
-The latest release of MultiScreenDimmer can be downloaded from the [Releases](https://github.com/your-username/your-repository/releases/latest) section.
+The latest release of MultiScreenDimmer can be downloaded from the [Releases](https://github.com/realredjohn/MultiScreenDimmer/releases/latest) section.
 
 ## Feedback
 
