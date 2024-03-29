@@ -79,10 +79,8 @@
             // 
             // AboutForm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(728, 534);
-            StartPosition = FormStartPosition.Manual;
             Controls.Add(labelLicense);
             Controls.Add(labelAbout);
             Controls.Add(textBoxLicense);
@@ -91,6 +89,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "AboutForm";
+            StartPosition = FormStartPosition.Manual;
             Text = "About MultiScreenDimmer";
             ResumeLayout(false);
             PerformLayout();

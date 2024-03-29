@@ -105,13 +105,13 @@ namespace DimScreen
 
 
         // HideOnCloseCheckbox 
-        public void SaveHideOnCloseCheckboxState(bool state)
+        public void SaveMinimizeCheckBoxState(bool state)
         {
             _hideOnCloseCheckboxState = state;
             SaveData();
         }
 
-        public bool LoadHideOnCloseCheckboxState()
+        public bool LoadMinimizeCheckBoxState()
         {
             LoadData();
             return _hideOnCloseCheckboxState;

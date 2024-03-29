@@ -4,6 +4,7 @@ using MultiScreenDimmer;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace DimScreen
 {
@@ -43,10 +44,10 @@ namespace DimScreen
         private IntPtr _hookID = IntPtr.Zero;
         private LowLevelKeyboardProc _proc;
 
-        // Define the low-level keyboard hook callback function
+        // Low-level keyboard hook callback function
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-        // Import necessary functions
+        // Necessary functions
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
 
@@ -62,23 +63,28 @@ namespace DimScreen
         #endregion
 
 
+        // Application Settings
         private const string StartupRegistryKey = "Software\\Microsoft\\Windows\\CurrentVersion\\Run";
         private const string AppName = "MultiScreenDimmer";
 
+        // Overlay Windows
         private Dictionary<int, Form> _overlayWindows = new Dictionary<int, Form>();
 
+        // Data Storage and Forms
         private DataStorage? _dataStorage;
         private AboutForm _aboutBox = new AboutForm();
         private ToolTip _toolTip = new ToolTip();
 
+        // Monitor Information
         private List<Form> _monitorNumberForms = new List<Form>();
         private List<MonitorInfo>? _monitorInfoList;
+
+        // Profile Information
         private List<Profile>? _profileList;
-
         private bool _isProfileSet = false;
-
         private Dictionary<Profile, List<Keys>> _profileShortcuts = new Dictionary<Profile, List<Keys>>();
 
+        // Keyboard Input Handling
         private HashSet<Keys> _pressedKeys = new HashSet<Keys>();
 
         // System Tray
@@ -88,12 +94,12 @@ namespace DimScreen
         private ToolStripMenuItem? _showMenuItem;
         private ToolStripMenuItem? _exitMenuItem;
 
-        // App Position
+        // Application Position
         private Point _lastLocation;
-        private Size _lastSize;
 
+        // Shortcut Popup
         private bool _isShortcutPopupOpen = false;
-        private bool _isProfilesSectionVisible;
+
 
 
         public MultiScreenDimmer()
@@ -102,8 +108,8 @@ namespace DimScreen
             InitializeComponent();
             InitializeDataStorage();
             InitializeSystemTray();
-            InitializeStartup();
-            InitializeHideOnClose();
+            InitializeStartupCheckBox();
+            InitializeMinimizeCheckBox();
 
             // Get displays and profiles
             PopulateMonitors();
@@ -118,12 +124,19 @@ namespace DimScreen
         // --------------------------------------------------------------------
 
         #region Startup Related Methods
-        private void InitializeStartup()
+        private void InitializeStartupCheckBox()
         {
-            checkStartup.Checked = IsStartupEnabled();
+            try
+            {
+                checkBoxStartup.Checked = IsStartupCheckBoxEnabled();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error initializing startup: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private bool IsStartupEnabled()
+        private bool IsStartupCheckBoxEnabled()
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(StartupRegistryKey, true))
             {
@@ -131,38 +144,46 @@ namespace DimScreen
             }
         }
 
-        private void SetStartup(bool enabled)
+        private void SetStartupCheckBox(bool enabled)
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(StartupRegistryKey, true))
+            try
             {
-                if (enabled)
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(StartupRegistryKey, true))
                 {
-                    key.SetValue(AppName, Application.ExecutablePath);
+                    if (enabled)
+                    {
+                        key.SetValue(AppName, Application.ExecutablePath);
+                    }
+                    else
+                    {
+                        key.DeleteValue(AppName, false);
+                    }
                 }
-                else
-                {
-                    key.DeleteValue(AppName, false);
-                }
+            }
+            catch (Exception ex)
+            {
+                // Handle registry access error
+                MessageBox.Show($"Error accessing registry: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void checkStartup_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxStartup_CheckedChanged(object sender, EventArgs e)
         {
-            _startupMenuItem.Checked = checkStartup.Checked;
+            _startupMenuItem.Checked = checkBoxStartup.Checked;
 
-            SetStartup(checkStartup.Checked);
+            SetStartupCheckBox(checkBoxStartup.Checked);
         }
         #endregion
 
-        #region Hide On Close Related Methods
-        private void InitializeHideOnClose()
+        #region Minimize or Close Related Methods
+        private void InitializeMinimizeCheckBox()
         {
-            checkHideOnClose.Checked = _dataStorage.LoadHideOnCloseCheckboxState();
+            checkBoxMinimize.Checked = _dataStorage.LoadMinimizeCheckBoxState();
         }
 
-        private void checkHideOnClose_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxMinimize_CheckedChanged(object sender, EventArgs e)
         {
-            _dataStorage.SaveHideOnCloseCheckboxState(checkHideOnClose.Checked);
+            _dataStorage.SaveMinimizeCheckBoxState(checkBoxMinimize.Checked);
         }
         #endregion
 
@@ -178,7 +199,7 @@ namespace DimScreen
             _contextMenuStrip = new ContextMenuStrip();
 
             _startupMenuItem = new ToolStripMenuItem("Start with Windows");
-            _startupMenuItem.Checked = checkStartup.Checked; // Sync with checkStartup
+            _startupMenuItem.Checked = checkBoxStartup.Checked; // Sync with checkStartup
             _startupMenuItem.Click += StartupMenuItem_Click;
             _contextMenuStrip.Items.Add(_startupMenuItem);
 
@@ -203,10 +224,14 @@ namespace DimScreen
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                if (checkHideOnClose.Checked)
+                if (checkBoxMinimize.Checked)
                 {
                     e.Cancel = true; // Cancel the form closing event
                     HideForm(); // Hide the form instead of closing it
+                }
+                else
+                {
+                    ExitApplication();
                 }
             }
         }
@@ -215,7 +240,7 @@ namespace DimScreen
         {
             ToolStripMenuItem menuItem = (ToolStripMenuItem)sender;
             menuItem.Checked = !menuItem.Checked; // Toggle the checked state
-            checkStartup.Checked = menuItem.Checked; // Sync with checkStartup
+            checkBoxStartup.Checked = menuItem.Checked; // Sync with checkStartup
         }
 
         private void ShowMenuItem_Click(object sender, EventArgs e)
@@ -301,15 +326,6 @@ namespace DimScreen
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
         }
 
-        // Override the Form's OnFormClosing event to unhook the keyboard
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            base.OnFormClosing(e);
-            UnhookWindowsHookEx(_hookID);
-                        
-            SaveWindowPositionAndSize();
-        }
-
         private IntPtr SetHook(LowLevelKeyboardProc proc)
         {
             using (Process curProcess = Process.GetCurrentProcess())
@@ -330,7 +346,6 @@ namespace DimScreen
                 _profileShortcuts.Add(profile, GetKeysFromShortcut(profile));
             }
         }
-
 
         private List<Keys> GetKeysFromShortcut(Profile profile)
         {
@@ -367,36 +382,29 @@ namespace DimScreen
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            LoadWindowPositionAndSize();
-
-            _isProfilesSectionVisible = (Size.Width > 1000);
-            SetToggleProfileSectionButton();
+            LoadWindowPosition();
         }
 
         // Override the OnFormClosing event to save window position and size
         // ==>> Override OnFormClosing on Region Keyboard Hook Related Methods
 
         // Method to save window position and size
-        private void SaveWindowPositionAndSize()
+        private void SaveWindowPosition()
         {
-            // Save the window's location and size
             global::MultiScreenDimmer.Properties.Settings.Default.LastLocation = Location;
-            global::MultiScreenDimmer.Properties.Settings.Default.LastSize = Size;
             global::MultiScreenDimmer.Properties.Settings.Default.Save();
         }
 
         // Method to load and apply window position and size
-        private void LoadWindowPositionAndSize()
+        private void LoadWindowPosition()
         {
             // Load the window's location and size
             _lastLocation = global::MultiScreenDimmer.Properties.Settings.Default.LastLocation;
-            _lastSize = global::MultiScreenDimmer.Properties.Settings.Default.LastSize;
 
             // If the location and size are valid, apply them
-            if (_lastLocation != Point.Empty && _lastSize != Size.Empty)
+            if (_lastLocation != Point.Empty)
             {
                 Location = _lastLocation;
-                Size = _lastSize;
             }
         }
 
@@ -420,7 +428,7 @@ namespace DimScreen
                     }
                 }
 
-                string numberString = Regex.Match(screen.DeviceName, @"\d+").Value;
+                string numberString = MyRegex().Match(screen.DeviceName).Value;
                 int monitorNumberInt;
                 if (!int.TryParse(numberString, out monitorNumberInt))
                 {
@@ -603,7 +611,7 @@ namespace DimScreen
 
         private void ShowMonitorNumbers()
         {
-            buttonShowNumbers.Enabled = false;
+            buttonIdentifyDisplays.Enabled = false;
 
             foreach (Screen screen in Screen.AllScreens)
             {
@@ -622,7 +630,7 @@ namespace DimScreen
                 {
                     form.Close();
                 }
-                buttonShowNumbers.Enabled = true;
+                buttonIdentifyDisplays.Enabled = true;
                 timer.Stop();
             };
             timer.Start();
@@ -679,14 +687,14 @@ namespace DimScreen
             CheckAndUpdateApplyDimButton();
         }
 
-        private void buttonShowNumbers_Click(object sender, EventArgs e)
+        private void buttonIdentifyDisplays_Click(object sender, EventArgs e)
         {
             ShowMonitorNumbers();
         }
 
         private void trackBarOpacity_Scroll(object sender, EventArgs e)
         {
-            textBoxOpacityValue.Text = $"{trackBarOpacity.Value}";
+            textBoxDimValue.Text = $"{trackBarOpacity.Value}";
         }
 
         private void trackBarOpacity_MouseHover(object sender, EventArgs e)
@@ -703,18 +711,18 @@ namespace DimScreen
         private void TextBoxOpacityValue_TextChanged(object sender, EventArgs e)
         {
             int value;
-            if (int.TryParse(textBoxOpacityValue.Text, out value))
+            if (int.TryParse(textBoxDimValue.Text, out value))
             {
                 if (value < 0)
                     value = 0;
                 else if (value > 100)
                     value = 100;
                 trackBarOpacity.Value = value;
-                textBoxOpacityValue.Text = $"{value}";
+                textBoxDimValue.Text = $"{value}";
             }
         }
 
-        private void buttonSetDim_Click(object sender, EventArgs e)
+        private void buttonApplyDim_Click(object sender, EventArgs e)
         {
             Dim();
         }
@@ -798,46 +806,6 @@ namespace DimScreen
             PopulateProfileShortcuts();
         }
 
-        private void buttonToggleProfilesSection_Click(object sender, EventArgs e)
-        {
-            if (_isProfilesSectionVisible)
-            {
-                _isProfilesSectionVisible = false;
-                ClientSize = originalSize;
-                SetToggleProfileSectionButton();
-            }
-            else
-            {
-                _isProfilesSectionVisible = true;
-                ClientSize = sizeWithProfiles;
-                SetToggleProfileSectionButton();
-            }
-        }
-
-        private void buttonToggleProfilesSection_MouseHover(object sender, EventArgs e)
-        {
-            if (_isProfilesSectionVisible)
-            {
-                _toolTip.SetToolTip(buttonToggleProfilesSection, "Hide Profiles Section");
-            }
-            else
-            {
-                _toolTip.SetToolTip(buttonToggleProfilesSection, "Show Profiles Section");
-            }
-        }
-
-        private void SetToggleProfileSectionButton()
-        {
-            if (_isProfilesSectionVisible)
-            {
-                buttonToggleProfilesSection.Text = "ᐊ";
-            }
-            else
-            {
-                buttonToggleProfilesSection.Text = "ᐅ";
-            }
-        }
-
         private void labelHelp_MouseHover(object sender, EventArgs e)
         {
             _toolTip.SetToolTip(labelHelp, "- Click on display name to rename." +
@@ -879,11 +847,11 @@ namespace DimScreen
         {
             if (listBoxMonitors.SelectedIndices.Count > 0 && trackBarOpacity.Value != 0)
             {
-                buttonSetDim.Enabled = true;
+                buttonApplyDim.Enabled = true;
             }
             else
             {
-                buttonSetDim.Enabled = false;
+                buttonApplyDim.Enabled = false;
             }
         }
 
@@ -905,6 +873,18 @@ namespace DimScreen
                 }
             }
         }
+
+        private void ExitApplication()
+        {
+            SaveWindowPosition();
+            DisposeOverlayWindows();
+            _notifyIcon?.Dispose();
+            UnhookWindowsHookEx(_hookID);
+            Application.Exit();
+        }
+
+        [GeneratedRegex(@"\d+")]
+        private static partial Regex MyRegex();
         #endregion
 
     }

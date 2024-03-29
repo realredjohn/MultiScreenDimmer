@@ -2,6 +2,303 @@
 {
     partial class MultiScreenDimmer
     {
+        private TableLayoutPanel tableLayoutPanelMain;
+
+        private TableLayoutPanel innerTableTrackbar;
+        private TableLayoutPanel innerTableExtra;
+        private TableLayoutPanel innerTableProfiles;
+        
+        private ListBox listBoxMonitors;
+        private Button buttonIdentifyDisplays;
+        private Button buttonApplyDim;
+        private TrackBar trackBarOpacity;
+        private TextBox textBoxDimValue;
+        private Label labelDimPerc;
+        private Button buttonResetDim;
+        private Button buttonSetProfile;
+        private CheckBox checkBoxStartup;
+        private CheckBox checkBoxMinimize;
+        private Label labelHelp;
+        private Label labelInfo;
+        private Panel panelVerticalLine1;
+        private ProfileBox profileBox1;
+        private ProfileBox profileBox2;
+        private ProfileBox profileBox3;
+        private NotifyIcon notifyIcon1;
+
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+
+            tableLayoutPanelMain = new TableLayoutPanel();
+
+            innerTableTrackbar = new TableLayoutPanel();
+            innerTableExtra = new TableLayoutPanel();
+            innerTableProfiles = new TableLayoutPanel();
+            
+            listBoxMonitors = new ListBox();
+            buttonIdentifyDisplays = new Button();
+            buttonApplyDim = new Button();
+            trackBarOpacity = new TrackBar();
+            textBoxDimValue = new TextBox();
+            labelDimPerc = new Label();
+            buttonResetDim = new Button();
+            buttonSetProfile = new Button();
+            checkBoxStartup = new CheckBox();
+            checkBoxMinimize = new CheckBox();
+            labelHelp = new Label();
+            labelInfo = new Label();
+            panelVerticalLine1 = new Panel();
+            profileBox1 = new ProfileBox();
+            profileBox2 = new ProfileBox();
+            profileBox3 = new ProfileBox();
+            notifyIcon1 = new NotifyIcon(components);
+            
+            ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
+            SuspendLayout();
+
+
+            //
+            // TableLayoutPanel settings
+            tableLayoutPanelMain.SuspendLayout();
+            tableLayoutPanelMain.Dock = DockStyle.Fill;
+            tableLayoutPanelMain.ColumnCount = 4;
+            tableLayoutPanelMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 10F));
+            tableLayoutPanelMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12F));
+            tableLayoutPanelMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1F));
+            tableLayoutPanelMain.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 16F));
+            tableLayoutPanelMain.RowCount = 6;
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 2F));
+            tableLayoutPanelMain.RowStyles.Add(new RowStyle(SizeType.Percent, 3F));
+
+            // listBoxMonitors settings
+            listBoxMonitors.FormattingEnabled = true;
+            listBoxMonitors.ItemHeight = 20; // ????
+            listBoxMonitors.SelectionMode = SelectionMode.MultiSimple;
+            listBoxMonitors.Dock = DockStyle.Fill;
+            listBoxMonitors.Margin = new Padding(10, 5, 10, 5);
+            listBoxMonitors.TabIndex = 0; // add all
+
+            listBoxMonitors.SelectedIndexChanged += listBoxMonitors_SelectedIndexChanged;
+            listBoxMonitors.MouseDoubleClick += listBoxMonitors_MouseDoubleClick;
+
+            // buttonShowNumbers settings
+            buttonIdentifyDisplays.Text = "Identify Displays";
+            buttonIdentifyDisplays.UseVisualStyleBackColor = true;
+            buttonIdentifyDisplays.Dock = DockStyle.Fill;
+            buttonIdentifyDisplays.Margin = new Padding(10, 5, 10, 5);
+
+            buttonIdentifyDisplays.Click += buttonIdentifyDisplays_Click;
+                        
+            // trackBarOpacity settings
+            trackBarOpacity.LargeChange = 10;
+            trackBarOpacity.SmallChange = 5;
+            trackBarOpacity.TickFrequency = 3;
+            trackBarOpacity.Maximum = 100;
+            trackBarOpacity.Dock = DockStyle.Fill;
+
+            trackBarOpacity.Scroll += trackBarOpacity_Scroll;
+            trackBarOpacity.ValueChanged += trackBarOpacity_ValueChanged;
+            trackBarOpacity.MouseHover += trackBarOpacity_MouseHover;
+
+            // textBoxOpacityValue settings
+            textBoxDimValue.Dock = DockStyle.Fill;
+            textBoxDimValue.Anchor = AnchorStyles.Top;
+            textBoxDimValue.Margin = new Padding(2);
+            textBoxDimValue.Text = "0";
+
+            textBoxDimValue.TextChanged += TextBoxOpacityValue_TextChanged;
+
+            // labelPerc settings
+            labelDimPerc.Dock = DockStyle.Fill;
+            labelDimPerc.Anchor = AnchorStyles.Top;
+            labelDimPerc.TextAlign = ContentAlignment.MiddleLeft;
+            labelDimPerc.Margin = new Padding(2);
+            labelDimPerc.Text = "%";
+
+
+            //
+            // innerTableTrackbar settings
+            innerTableTrackbar.Dock = DockStyle.Fill;
+            innerTableTrackbar.ColumnCount = 3;
+            innerTableTrackbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 6f));
+            innerTableTrackbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 2f));
+            innerTableTrackbar.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1f));
+
+            innerTableTrackbar.Controls.Add(trackBarOpacity, 0, 0);
+            innerTableTrackbar.Controls.Add(textBoxDimValue, 1, 0);
+            innerTableTrackbar.Controls.Add(labelDimPerc, 2, 0);
+
+            // buttonSetDim settings
+            buttonApplyDim.Enabled = false;
+            buttonApplyDim.Text = "Apply Dim";
+            buttonApplyDim.UseVisualStyleBackColor = true;
+            buttonApplyDim.Dock = DockStyle.Fill;
+            buttonApplyDim.Margin = new Padding(10, 5, 10, 5);
+
+            buttonApplyDim.Click += buttonApplyDim_Click;
+
+            // buttonResetDim settings
+            buttonResetDim.Enabled = false;
+            buttonResetDim.Text = "Reset All";
+            buttonResetDim.UseVisualStyleBackColor = true;
+            buttonResetDim.Dock = DockStyle.Fill;
+            buttonResetDim.Margin = new Padding(10, 5, 10, 5);
+
+            buttonResetDim.Click += buttonResetDim_Click;
+
+            // buttonSetProfile settings
+            buttonSetProfile.Text = "Save Profile";
+            buttonSetProfile.UseVisualStyleBackColor = true;
+            buttonSetProfile.Dock = DockStyle.Fill;
+            buttonSetProfile.Margin = new Padding(10, 5, 10, 5);
+
+            buttonSetProfile.Click += buttonSetProfile_Click;
+
+
+            //
+            // innerTableExtra settings
+            innerTableExtra.Dock = DockStyle.Fill;
+            innerTableExtra.ColumnCount = 3;
+            innerTableExtra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8f));
+            innerTableExtra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1f));
+            innerTableExtra.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 1f));
+            innerTableExtra.RowCount = 2;
+            innerTableExtra.RowStyles.Add(new RowStyle(SizeType.Percent, 1f));
+            innerTableExtra.RowStyles.Add(new RowStyle(SizeType.Percent, 1f));
+
+            innerTableExtra.Controls.Add(checkBoxStartup, 0, 0);
+            innerTableExtra.Controls.Add(checkBoxMinimize, 0, 1);
+            innerTableExtra.Controls.Add(labelHelp, 1, 1);
+            innerTableExtra.Controls.Add(labelInfo, 2, 1);
+
+            // checkStartup settings
+            checkBoxStartup.AutoSize = true;
+            checkBoxStartup.Text = "Start with Windows";
+            checkBoxStartup.UseVisualStyleBackColor = true;
+            checkBoxStartup.Margin = new Padding(10, 0, 0, 0);
+
+            checkBoxStartup.CheckedChanged += checkBoxStartup_CheckedChanged;
+
+            // checkHideOnClose settings
+            checkBoxMinimize.AutoSize = true;
+            checkBoxMinimize.Text = "Minimize to system tray on close";
+            checkBoxMinimize.UseVisualStyleBackColor = true;
+            checkBoxMinimize.Margin = new Padding(10, 0, 0, 0);
+
+            checkBoxMinimize.CheckedChanged += checkBoxMinimize_CheckedChanged;
+
+            // labelHelp settings
+            labelHelp.TabIndex = 7;
+            labelHelp.Text = "?";
+            labelHelp.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelHelp.TextAlign = ContentAlignment.MiddleCenter;
+
+            labelHelp.MouseHover += labelHelp_MouseHover;
+
+            // labelInfo settings
+            labelInfo.Cursor = Cursors.Hand;
+            labelInfo.Text = "🛈";
+            labelInfo.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            labelInfo.TextAlign = ContentAlignment.MiddleCenter;
+
+            labelInfo.Click += labelInfo_Click;
+
+            // panelVerticalLine1 settings
+            panelVerticalLine1.BackColor = Color.LightGray;
+            panelVerticalLine1.Dock = DockStyle.Fill;
+            panelVerticalLine1.Margin = new Padding(9, 5, 9, 5);
+
+
+            //
+            // innerTableProfiles settings
+            innerTableProfiles.Dock = DockStyle.Fill;
+            innerTableProfiles.RowCount = 3;
+            innerTableProfiles.RowStyles.Add(new RowStyle(SizeType.Percent, 1f));
+            innerTableProfiles.RowStyles.Add(new RowStyle(SizeType.Percent, 1f));
+            innerTableProfiles.RowStyles.Add(new RowStyle(SizeType.Percent, 1f));
+
+            innerTableProfiles.Controls.Add(profileBox1, 0, 0);
+            innerTableProfiles.Controls.Add(profileBox2, 0, 1);
+            innerTableProfiles.Controls.Add(profileBox3, 0, 2);
+
+            // profileBox1 settings
+            profileBox1.Dock = DockStyle.Fill;
+            profileBox1.BackColor = Color.FromArgb(247, 247, 247);
+            profileBox1.BorderStyle = BorderStyle.FixedSingle;
+            profileBox1.Margin = new Padding(10, 5, 10, 5);
+
+            // profileBox2 setting
+            profileBox2.Dock = DockStyle.Fill;
+            profileBox2.BackColor = Color.FromArgb(247, 247, 247);
+            profileBox2.BorderStyle = BorderStyle.FixedSingle;
+            profileBox2.Margin = new Padding(10, 5, 10, 5);
+
+            // profileBox3 settings
+            profileBox3.Dock = DockStyle.Fill;
+            profileBox3.BackColor = Color.FromArgb(247, 247, 247);
+            profileBox3.BorderStyle = BorderStyle.FixedSingle;
+            profileBox3.Margin = new Padding(10, 5, 10, 5);
+
+            // notifyIcon1 settings
+            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.Visible = true;
+
+
+            // Add controls to tableLayoutPanelProfileBox
+            tableLayoutPanelMain.Controls.Add(listBoxMonitors, 0, 0);
+            tableLayoutPanelMain.SetRowSpan(listBoxMonitors, 4);
+
+            tableLayoutPanelMain.Controls.Add(buttonIdentifyDisplays, 1, 0);
+
+            tableLayoutPanelMain.Controls.Add(innerTableTrackbar, 1, 1);
+
+            tableLayoutPanelMain.Controls.Add(buttonApplyDim, 1, 2);
+
+            tableLayoutPanelMain.Controls.Add(buttonResetDim, 1, 3);
+
+            tableLayoutPanelMain.Controls.Add(buttonSetProfile, 0, 4);
+            tableLayoutPanelMain.SetColumnSpan(buttonSetProfile, 2);
+
+            tableLayoutPanelMain.Controls.Add(innerTableExtra, 0, 5);
+            tableLayoutPanelMain.SetColumnSpan(innerTableExtra, 2);
+
+            tableLayoutPanelMain.Controls.Add(panelVerticalLine1, 2, 0);
+            tableLayoutPanelMain.SetRowSpan(panelVerticalLine1, 6);
+
+            tableLayoutPanelMain.Controls.Add(innerTableProfiles, 3, 0);
+            tableLayoutPanelMain.SetRowSpan(innerTableProfiles, 6);
+
+
+            
+            AutoScaleMode = AutoScaleMode.None;
+            ClientSize = new Size(740, 300);
+
+            Controls.Add(tableLayoutPanelMain);
+            tableLayoutPanelMain.ResumeLayout(false);
+
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = global::MultiScreenDimmer.Properties.Resources.msd_icon_ico_3;
+
+            KeyPreview = true;
+            MaximizeBox = false;
+
+            Name = "MultiScreenDimmer";
+            Text = "MultiScreenDimmer";
+
+            ((System.ComponentModel.ISupportInitialize)trackBarOpacity).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
+        }
+        
+
+
+
+        #region Designer default
         /// <summary>
         ///  Required designer variable.
         /// </summary>
@@ -19,280 +316,6 @@
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
-            components = new System.ComponentModel.Container();
-            buttonSetDim = new Button();
-            buttonShowNumbers = new Button();
-            trackBarOpacity = new TrackBar();
-            textBoxOpacityValue = new TextBox();
-            buttonResetDim = new Button();
-            listBoxMonitors = new ListBox();
-            labelPerc = new Label();
-            buttonSetProfile = new Button();
-            labelHelp = new Label();
-            profileBox1 = new ProfileBox();
-            profileBox2 = new ProfileBox();
-            profileBox3 = new ProfileBox();
-            panelVerticalLine1 = new Panel();
-            labelInfo = new Label();
-            notifyIcon1 = new NotifyIcon(components);
-            checkStartup = new CheckBox();
-            checkHideOnClose = new CheckBox();
-            buttonToggleProfilesSection = new Button();
-            ((System.ComponentModel.ISupportInitialize)trackBarOpacity).BeginInit();
-            SuspendLayout();
-            // 
-            // buttonSetDim
-            // 
-            buttonSetDim.Enabled = false;
-            buttonSetDim.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            buttonSetDim.Location = new Point(360, 178);
-            buttonSetDim.Name = "buttonSetDim";
-            buttonSetDim.Size = new Size(303, 56);
-            buttonSetDim.TabIndex = 13;
-            buttonSetDim.Text = "Apply Dim";
-            buttonSetDim.UseVisualStyleBackColor = true;
-            buttonSetDim.Click += buttonSetDim_Click;
-            // 
-            // buttonShowNumbers
-            // 
-            buttonShowNumbers.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            buttonShowNumbers.Location = new Point(360, 28);
-            buttonShowNumbers.Name = "buttonShowNumbers";
-            buttonShowNumbers.Size = new Size(303, 56);
-            buttonShowNumbers.TabIndex = 10;
-            buttonShowNumbers.Text = "Identify Displays";
-            buttonShowNumbers.UseVisualStyleBackColor = true;
-            buttonShowNumbers.Click += buttonShowNumbers_Click;
-            // 
-            // trackBarOpacity
-            // 
-            trackBarOpacity.LargeChange = 10;
-            trackBarOpacity.Location = new Point(360, 104);
-            trackBarOpacity.Maximum = 100;
-            trackBarOpacity.Name = "trackBarOpacity";
-            trackBarOpacity.Size = new Size(240, 56);
-            trackBarOpacity.SmallChange = 5;
-            trackBarOpacity.TabIndex = 11;
-            trackBarOpacity.TickFrequency = 5;
-            trackBarOpacity.TickStyle = TickStyle.Both;
-            trackBarOpacity.Scroll += trackBarOpacity_Scroll;
-            trackBarOpacity.ValueChanged += trackBarOpacity_ValueChanged;
-            trackBarOpacity.MouseHover += trackBarOpacity_MouseHover;
-            // 
-            // textBoxOpacityValue
-            // 
-            textBoxOpacityValue.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            textBoxOpacityValue.Location = new Point(597, 113);
-            textBoxOpacityValue.Name = "textBoxOpacityValue";
-            textBoxOpacityValue.Size = new Size(44, 30);
-            textBoxOpacityValue.TabIndex = 12;
-            textBoxOpacityValue.Text = "0";
-            textBoxOpacityValue.TextChanged += TextBoxOpacityValue_TextChanged;
-            // 
-            // buttonResetDim
-            // 
-            buttonResetDim.Enabled = false;
-            buttonResetDim.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            buttonResetDim.Location = new Point(360, 251);
-            buttonResetDim.Name = "buttonResetDim";
-            buttonResetDim.Size = new Size(303, 56);
-            buttonResetDim.TabIndex = 14;
-            buttonResetDim.Text = "Reset All";
-            buttonResetDim.UseVisualStyleBackColor = true;
-            buttonResetDim.Click += buttonResetDim_Click;
-            // 
-            // listBoxMonitors
-            // 
-            listBoxMonitors.Font = new Font("Segoe UI", 11F);
-            listBoxMonitors.FormattingEnabled = true;
-            listBoxMonitors.ItemHeight = 25;
-            listBoxMonitors.Location = new Point(29, 28);
-            listBoxMonitors.Name = "listBoxMonitors";
-            listBoxMonitors.SelectionMode = SelectionMode.MultiSimple;
-            listBoxMonitors.Size = new Size(313, 279);
-            listBoxMonitors.TabIndex = 9;
-            listBoxMonitors.SelectedIndexChanged += listBoxMonitors_SelectedIndexChanged;
-            listBoxMonitors.MouseDoubleClick += listBoxMonitors_MouseDoubleClick;
-            // 
-            // labelPerc
-            // 
-            labelPerc.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            labelPerc.Location = new Point(641, 113);
-            labelPerc.Name = "labelPerc";
-            labelPerc.Size = new Size(22, 30);
-            labelPerc.TabIndex = 100;
-            labelPerc.Text = "%";
-            // 
-            // buttonSetProfile
-            // 
-            buttonSetProfile.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            buttonSetProfile.Location = new Point(29, 324);
-            buttonSetProfile.Name = "buttonSetProfile";
-            buttonSetProfile.Size = new Size(562, 56);
-            buttonSetProfile.TabIndex = 15;
-            buttonSetProfile.Text = "Save Profile";
-            buttonSetProfile.UseVisualStyleBackColor = true;
-            buttonSetProfile.Click += buttonSetProfile_Click;
-            // 
-            // labelHelp
-            // 
-            labelHelp.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
-            labelHelp.Location = new Point(597, 454);
-            labelHelp.Name = "labelHelp";
-            labelHelp.Size = new Size(23, 37);
-            labelHelp.TabIndex = 7;
-            labelHelp.Text = "?";
-            labelHelp.MouseHover += labelHelp_MouseHover;
-            // 
-            // profileBox1
-            // 
-            profileBox1.BackColor = Color.FromArgb(247, 247, 247);
-            profileBox1.BorderStyle = BorderStyle.FixedSingle;
-            profileBox1.Location = new Point(725, 28);
-            profileBox1.Name = "profileBox1";
-            profileBox1.Size = new Size(514, 142);
-            profileBox1.TabIndex = 136;
-            // 
-            // profileBox2
-            // 
-            profileBox2.BackColor = Color.FromArgb(247, 247, 247);
-            profileBox2.BorderStyle = BorderStyle.FixedSingle;
-            profileBox2.Location = new Point(725, 187);
-            profileBox2.Name = "profileBox2";
-            profileBox2.Size = new Size(514, 142);
-            profileBox2.TabIndex = 17;
-            // 
-            // profileBox3
-            // 
-            profileBox3.BackColor = Color.FromArgb(247, 247, 247);
-            profileBox3.BorderStyle = BorderStyle.FixedSingle;
-            profileBox3.Location = new Point(725, 349);
-            profileBox3.Name = "profileBox3";
-            profileBox3.Size = new Size(514, 142);
-            profileBox3.TabIndex = 18;
-            // 
-            // panelVerticalLine1
-            // 
-            panelVerticalLine1.BackColor = Color.Black;
-            panelVerticalLine1.Location = new Point(692, 28);
-            panelVerticalLine1.Name = "panelVerticalLine1";
-            panelVerticalLine1.Size = new Size(1, 464);
-            panelVerticalLine1.TabIndex = 100;
-            // 
-            // labelInfo
-            // 
-            labelInfo.Cursor = Cursors.Hand;
-            labelInfo.Font = new Font("Segoe UI", 16F);
-            labelInfo.Location = new Point(626, 454);
-            labelInfo.Name = "labelInfo";
-            labelInfo.Size = new Size(37, 37);
-            labelInfo.TabIndex = 7;
-            labelInfo.Text = "🛈";
-            labelInfo.Click += labelInfo_Click;
-            // 
-            // notifyIcon1
-            // 
-            notifyIcon1.Text = "notifyIcon1";
-            notifyIcon1.Visible = true;
-            // 
-            // checkStartup
-            // 
-            checkStartup.AutoSize = true;
-            checkStartup.Location = new Point(29, 464);
-            checkStartup.Name = "checkStartup";
-            checkStartup.Size = new Size(159, 24);
-            checkStartup.TabIndex = 137;
-            checkStartup.Text = "Start with Windows";
-            checkStartup.UseVisualStyleBackColor = true;
-            checkStartup.CheckedChanged += checkStartup_CheckedChanged;
-            // 
-            // checkHideOnClose
-            // 
-            checkHideOnClose.AutoSize = true;
-            checkHideOnClose.Location = new Point(222, 464);
-            checkHideOnClose.Name = "checkHideOnClose";
-            checkHideOnClose.Size = new Size(247, 24);
-            checkHideOnClose.TabIndex = 137;
-            checkHideOnClose.Text = "Minimize to system tray on close";
-            checkHideOnClose.UseVisualStyleBackColor = true;
-            checkHideOnClose.CheckedChanged += checkHideOnClose_CheckedChanged;
-            // 
-            // buttonToggleProfilesSection
-            // 
-            buttonToggleProfilesSection.Font = new Font("Segoe UI", 14F);
-            buttonToggleProfilesSection.Location = new Point(606, 324);
-            buttonToggleProfilesSection.Name = "buttonToggleProfilesSection";
-            buttonToggleProfilesSection.Size = new Size(57, 56);
-            buttonToggleProfilesSection.TabIndex = 15;
-            buttonToggleProfilesSection.Text = "ᐅ";
-            buttonToggleProfilesSection.UseVisualStyleBackColor = true;
-            buttonToggleProfilesSection.Click += buttonToggleProfilesSection_Click;
-            buttonToggleProfilesSection.MouseHover += buttonToggleProfilesSection_MouseHover;
-            // 
-            // DimScreen
-            // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(692, 516);
-            Controls.Add(checkHideOnClose);
-            Controls.Add(checkStartup);
-            Controls.Add(profileBox3);
-            Controls.Add(profileBox2);
-            Controls.Add(profileBox1);
-            Controls.Add(panelVerticalLine1);
-            Controls.Add(buttonToggleProfilesSection);
-            Controls.Add(buttonSetProfile);
-            Controls.Add(labelPerc);
-            Controls.Add(labelInfo);
-            Controls.Add(labelHelp);
-            Controls.Add(listBoxMonitors);
-            Controls.Add(buttonResetDim);
-            Controls.Add(textBoxOpacityValue);
-            Controls.Add(trackBarOpacity);
-            Controls.Add(buttonShowNumbers);
-            Controls.Add(buttonSetDim);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            KeyPreview = true;
-            MaximizeBox = false;
-            Name = "DimScreen";
-            Text = "MultiScreenDimmer";
-            Icon = global::MultiScreenDimmer.Properties.Resources.msd_icon_ico_3;
-            ((System.ComponentModel.ISupportInitialize)trackBarOpacity).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
-        }
-
         #endregion
-
-        private Size originalSize = new Size(692, 516);
-        private Size sizeWithProfiles = new Size(1264, 516);
-
-        private Button buttonSetDim;
-        private Button buttonShowNumbers;
-        private TrackBar trackBarOpacity;
-        private TextBox textBoxOpacityValue;
-        private Button buttonResetDim;
-        private ListBox listBoxMonitors;
-        private Label labelPerc;
-        private Button buttonSetProfile;
-        private Label labelHelp;
-        private ProfileBox profileBox1;
-        private ProfileBox profileBox2;
-        private ProfileBox profileBox3;
-        private Panel panelVerticalLine1;
-        private Label labelInfo;
-        private NotifyIcon notifyIcon1;
-        private CheckBox checkStartup;
-        private CheckBox checkHideOnClose;
-        private Button buttonToggleProfilesSection;
     }
 }

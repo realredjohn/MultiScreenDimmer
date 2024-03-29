@@ -40,7 +40,7 @@
             instructionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             instructionLabel.Location = new Point(12, 18);
             instructionLabel.Name = "instructionLabel";
-            instructionLabel.Size = new Size(314, 23);
+            instructionLabel.Size = new Size(218, 23);
             instructionLabel.TabIndex = 0;
             instructionLabel.Text = "Press a key combination...";
             // 
@@ -48,11 +48,11 @@
             // 
             shortcutLabel.BackColor = SystemColors.ControlLightLight;
             shortcutLabel.BorderStyle = BorderStyle.FixedSingle;
-            shortcutLabel.TextAlign = ContentAlignment.MiddleCenter;
             shortcutLabel.Location = new Point(12, 142);
             shortcutLabel.Name = "shortcutLabel";
             shortcutLabel.Size = new Size(289, 34);
             shortcutLabel.TabIndex = 1;
+            shortcutLabel.TextAlign = ContentAlignment.MiddleCenter;
             shortcutLabel.Click += ShortcutLabel_Click;
             // 
             // okButton
@@ -72,28 +72,25 @@
             infoLabel.Font = new Font("Segoe UI", 9F);
             infoLabel.Location = new Point(12, 48);
             infoLabel.Name = "infoLabel";
-            infoLabel.Size = new Size(213, 20);
+            infoLabel.Size = new Size(234, 60);
             infoLabel.TabIndex = 0;
-            infoLabel.Text = "* Click on the text field to reset" +
-                             "\n* Max. 3 keys" +
-                             "\n* Allowed keys: Ctrl, Shift, 0-9, A-Z";
+            infoLabel.Text = "* Click on the text field to reset\n* Max. 3 keys\n* Allowed keys: Ctrl, Shift, 0-9, A-Z";
             // 
             // ShortcutPopupForm
             // 
-            Icon = global::MultiScreenDimmer.Properties.Resources.msd_icon_ico_3;
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            StartPosition = FormStartPosition.Manual;
+            AutoScaleMode = AutoScaleMode.None;
             ClientSize = new Size(398, 201);
             Controls.Add(okButton);
             Controls.Add(shortcutLabel);
             Controls.Add(infoLabel);
             Controls.Add(instructionLabel);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = global::MultiScreenDimmer.Properties.Resources.msd_icon_ico_3;
             KeyPreview = true;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "ShortcutPopupForm";
+            StartPosition = FormStartPosition.Manual;
             Text = "Set Shortcut";
             KeyDown += ShortcutPopupForm_KeyDown;
             ResumeLayout(false);
