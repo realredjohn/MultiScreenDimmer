@@ -100,7 +100,8 @@ namespace DimScreen
         // Shortcut Popup
         private bool _isShortcutPopupOpen = false;
 
-
+        // File Path
+        string filePath = "MultiScreenDimmer_SaveData.json";
 
         public MultiScreenDimmer()
         {
@@ -152,7 +153,10 @@ namespace DimScreen
                 {
                     if (enabled)
                     {
-                        key.SetValue(AppName, Application.ExecutablePath);
+                        // startup argument to check if the application is launched with Windows startup
+                        string executablePathWithArgument = $"{Application.ExecutablePath} startup";
+
+                        key.SetValue(AppName, executablePathWithArgument);
                     }
                     else
                     {
@@ -262,6 +266,7 @@ namespace DimScreen
         {
             Show();
             WindowState = FormWindowState.Normal;
+            ShowInTaskbar = true;
         }
 
         private void NotifyIcon_DoubleClick(object sender, EventArgs e)
@@ -273,8 +278,8 @@ namespace DimScreen
         #region Data Storage Related Methods
         private void InitializeDataStorage()
         {
-            string filePath = "saveData.json";
-            _dataStorage = new DataStorage(filePath);
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            _dataStorage = new DataStorage(Path.Combine(appDataPath, filePath));
             _monitorInfoList = _dataStorage.LoadMonitorInfo();
             ReloadProfiles();
         }

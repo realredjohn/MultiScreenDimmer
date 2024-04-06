@@ -9,7 +9,13 @@
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
     <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
     <BaseOutputPath>Z:\C# Projects\Releases</BaseOutputPath>
+    <IncludeSymbols>False</IncludeSymbols>
+    <ApplicationIcon>msd_icon_ico_3.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="msd_icon_ico_3.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Management" Version="8.0.0" />
